@@ -12,9 +12,12 @@ import com.bassem.newbornnames.adapters.NamesAdapter
 import com.bassem.newbornnames.adapters.SwipeAdapter
 import com.bassem.newbornnames.databinding.NamesFragmentBinding
 import com.bassem.newbornnames.entities.NameClass
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class NamesFragment : Fragment(R.layout.names_fragment) {
     var binding: NamesFragmentBinding? = null
+    lateinit var bottomNavigationView: BottomNavigationView
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,6 +34,9 @@ class NamesFragment : Fragment(R.layout.names_fragment) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        bottomNavigationView = requireActivity().findViewById(R.id.bottomAppBar)
+        bottomNavigationView.visibility = View.VISIBLE
+
         val namesList: MutableList<NameClass> = mutableListOf()
         namesList.add(NameClass("باسم", "اسم جميل جدا للمولود لا ينفع يكون اسم وحش "))
         namesList.add(NameClass("محمد", "اسم جميل جدا للمولود لا ينفع يكون اسم وحش "))
