@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
+    android:id="@+id/nameLayout"
     android:layout_height="match_parent"
+    android:background="@drawable/babygi"
     android:orientation="vertical">
 
 
@@ -11,12 +13,11 @@
         android:layout_height="match_parent"
         android:visibility="gone" />
 
- <com.yalantis.library.Koloda
-     android:id="@+id/stackView"
-     android:layout_width="match_parent"
-     android:layout_height="match_parent"
-     >
+    <com.yalantis.library.Koloda
+        android:id="@+id/stackView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
 
- </com.yalantis.library.Koloda>
+    </com.yalantis.library.Koloda>
 </LinearLayout>

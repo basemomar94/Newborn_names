@@ -29,17 +29,23 @@ class SwipeAdapter(
     }
 
     override fun getView(p0: Int, convertView: View?, parent: ViewGroup?): View {
-        // Inflate the custom view
         val inflater = parent?.context?.
         getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val view = inflater.inflate(R.layout.name_item,null)
         val currentItem = namesList[p0]
         val name: TextView = view!!.findViewById(R.id.name)
-        val description = view!!.findViewById<TextView>(R.id.description)
+        val description = view.findViewById<TextView>(R.id.description)
         name.text = currentItem.title
         description.text = currentItem.description
+        convertView?.setOnClickListener {
+
+        }
 
 
         return view
+    }
+
+    interface Click{
+        fun onclick()
     }
 }
