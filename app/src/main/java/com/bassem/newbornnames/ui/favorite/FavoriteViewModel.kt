@@ -14,4 +14,10 @@ class FavoriteViewModel : ViewModel() {
         val db = NamesDatabase.getInstance(context)
         favNames.postValue(db.namesDao().getNames())
     }
+
+    fun removeFav(item: NameClass, context: Context) {
+        val db = NamesDatabase.getInstance(context)
+        db.namesDao().deleteName(item)
+
+    }
 }
