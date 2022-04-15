@@ -10,9 +10,10 @@ import com.bassem.newbornnames.R
 import com.bassem.newbornnames.adapters.SwipeAdapter
 import com.bassem.newbornnames.databinding.NamesFragmentBinding
 import com.bassem.newbornnames.entities.NameClass
+import com.bassem.newbornnames.local.NamesDatabase
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
-class NamesFragment : Fragment(R.layout.names_fragment),SwipeAdapter.Click {
+class NamesFragment : Fragment(R.layout.names_fragment), SwipeAdapter.Click {
     var binding: NamesFragmentBinding? = null
     lateinit var bottomNavigationView: BottomNavigationView
 
@@ -59,7 +60,7 @@ class NamesFragment : Fragment(R.layout.names_fragment),SwipeAdapter.Click {
 
 
     private fun initSwipeView(list: MutableList<NameClass>) {
-        val swipeAdapter = SwipeAdapter(list,this)
+        val swipeAdapter = SwipeAdapter(list, this)
         binding?.stackView?.apply {
             adapter = swipeAdapter
 
@@ -67,12 +68,21 @@ class NamesFragment : Fragment(R.layout.names_fragment),SwipeAdapter.Click {
     }
 
     override fun onfavClick(item: NameClass) {
+        addtoFav(item)
     }
 
     override fun onshareClick(item: NameClass) {
 
-        println("ايه رايك في اسم ${item.title}" +
-                " معناه ${item.description}")
+        println(
+            "ايه رايك في اسم ${item.title}" +
+                    " معناه ${item.description}"
+        )
+    }
+
+
+    private fun addtoFav(item: NameClass) {
+        var db = NamesDatabase.getInstance(requireContext())
+        db.namesDao().addName(item)
     }
 
 }
