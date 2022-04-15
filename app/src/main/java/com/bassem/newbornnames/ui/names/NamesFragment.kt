@@ -12,7 +12,7 @@ import com.bassem.newbornnames.databinding.NamesFragmentBinding
 import com.bassem.newbornnames.entities.NameClass
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
-class NamesFragment : Fragment(R.layout.names_fragment) {
+class NamesFragment : Fragment(R.layout.names_fragment),SwipeAdapter.Click {
     var binding: NamesFragmentBinding? = null
     lateinit var bottomNavigationView: BottomNavigationView
 
@@ -59,11 +59,20 @@ class NamesFragment : Fragment(R.layout.names_fragment) {
 
 
     private fun initSwipeView(list: MutableList<NameClass>) {
-        val swipeAdapter = SwipeAdapter(list)
+        val swipeAdapter = SwipeAdapter(list,this)
         binding?.stackView?.apply {
             adapter = swipeAdapter
 
         }
+    }
+
+    override fun onfavClick(item: NameClass) {
+    }
+
+    override fun onshareClick(item: NameClass) {
+
+        println("ايه رايك في اسم ${item.title}" +
+                " معناه ${item.description}")
     }
 
 }
