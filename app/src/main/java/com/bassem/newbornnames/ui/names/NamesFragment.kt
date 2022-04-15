@@ -12,10 +12,13 @@ import com.bassem.newbornnames.databinding.NamesFragmentBinding
 import com.bassem.newbornnames.entities.NameClass
 import com.bassem.newbornnames.local.NamesDatabase
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 class NamesFragment : Fragment(R.layout.names_fragment), SwipeAdapter.Click {
     var binding: NamesFragmentBinding? = null
     lateinit var bottomNavigationView: BottomNavigationView
+    var viewmodel: NamesViewModel? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,21 +38,21 @@ class NamesFragment : Fragment(R.layout.names_fragment), SwipeAdapter.Click {
         super.onViewCreated(view, savedInstanceState)
         bottomNavigationView = requireActivity().findViewById(R.id.bottomAppBar)
         bottomNavigationView.visibility = View.VISIBLE
-        val viewmodel = ViewModelProvider(this)[NamesViewModel::class.java]
+         viewmodel = ViewModelProvider(this)[NamesViewModel::class.java]
         var key = this.arguments?.getString("key")
         when (key) {
             "male" -> {
-                viewmodel.getBoyssNames()
+                viewmodel!!.getBoyssNames()
                 binding?.nameLayout?.background = requireActivity().getDrawable(R.drawable.babyboy)
 
             }
             "female" -> {
-                viewmodel.getGirlsNames()
+                viewmodel!!.getGirlsNames()
                 binding?.nameLayout?.background = requireActivity().getDrawable(R.drawable.babygi)
             }
         }
 
-        viewmodel.namesList.observe(viewLifecycleOwner) {
+        viewmodel!!.namesList.observe(viewLifecycleOwner) {
             if (it != null) {
                 initSwipeView(it)
             }
@@ -67,11 +70,15 @@ class NamesFragment : Fragment(R.layout.names_fragment), SwipeAdapter.Click {
         }
     }
 
-    override fun onfavClick(item: NameClass) {
-        addtoFav(item)
+    override  fun onfavClick(item: NameClass) {
+        Thread(Runnable {
+            viewmodel?.addtoFav(item,requireContext())
+
+        }).start()
+
     }
 
-    override fun onshareClick(item: NameClass) {
+    override  fun onshareClick(item: NameClass) {
 
         println(
             "ايه رايك في اسم ${item.title}" +
@@ -79,10 +86,5 @@ class NamesFragment : Fragment(R.layout.names_fragment), SwipeAdapter.Click {
         )
     }
 
-
-    private fun addtoFav(item: NameClass) {
-        var db = NamesDatabase.getInstance(requireContext())
-        db.namesDao().addName(item)
-    }
 
 }

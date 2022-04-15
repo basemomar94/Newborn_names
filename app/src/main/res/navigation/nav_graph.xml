@@ -10,14 +10,18 @@
         android:label="HomeFragment" >
         <action
             android:id="@+id/action_homeFragment_to_namesFragment"
-            app:destination="@id/namesFragment" />
+            app:destination="@id/names" />
     </fragment>
     <fragment
-        android:id="@+id/namesFragment"
+        android:id="@+id/names"
         android:name="com.bassem.newbornnames.ui.names.NamesFragment"
         android:label="NamesFragment" >
         <action
             android:id="@+id/action_namesFragment_to_homeFragment"
             app:destination="@id/homeFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/fav"
+        android:name="com.bassem.newbornnames.ui.favorite.Favorite_Fragment"
+        android:label="Favorite_Fragment" />
 </navigation>

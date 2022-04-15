@@ -2,12 +2,14 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
+        android:id="@+id/names"
         android:icon="@drawable/ic_baseline_insert_drive_file_24"
         android:title="تصفح الاسماء" />
     <item
         android:icon="@drawable/ic_baseline_search_24"
         android:title="البحث" />
     <item
+        android:id="@+id/fav"
         android:icon="@drawable/ic_baseline_favorite_border_24"
         android:title="المفضلة" />
 </menu>

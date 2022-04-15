@@ -9,6 +9,8 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.bassem.newbornnames.R
 import com.bassem.newbornnames.entities.NameClass
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 class SwipeAdapter(
     val namesList: MutableList<NameClass>,
@@ -44,6 +46,10 @@ class SwipeAdapter(
         share.setOnClickListener {
             listner.onshareClick(currentItem)
         }
+        fav.setOnClickListener {
+            listner.onfavClick(currentItem)
+        }
+
 
 
 

@@ -1,8 +1,10 @@
 package com.bassem.newbornnames.ui.names
 
+import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.bassem.newbornnames.entities.NameClass
+import com.bassem.newbornnames.local.NamesDatabase
 import com.google.firebase.firestore.FirebaseFirestore
 
 class NamesViewModel : ViewModel() {
@@ -38,5 +40,10 @@ class NamesViewModel : ViewModel() {
             namesList.postValue(list)
         }
 
+    }
+
+      fun addtoFav(item: NameClass, context: Context) {
+        var db = NamesDatabase.getInstance(context)
+        db.namesDao().addName(item)
     }
 }
