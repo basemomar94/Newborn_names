@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.bassem.newbornnames.R
@@ -50,7 +51,7 @@ class Favorite_Fragment : Fragment(R.layout.names_fragment), SwipeAdapter.Click 
 
 
     private fun initSwipeView(list: MutableList<NameClass>) {
-        val swipeAdapter = SwipeAdapter(list, this)
+        val swipeAdapter = SwipeAdapter(list, this,requireContext())
         binding?.stackView?.apply {
             adapter = swipeAdapter
 
@@ -69,6 +70,10 @@ class Favorite_Fragment : Fragment(R.layout.names_fragment), SwipeAdapter.Click 
 
     override fun onshareClick(item: NameClass) {
         shareName(item)
+
+    }
+
+    override fun onCancel(item: NameClass) {
 
     }
 

@@ -48,7 +48,8 @@
             android:layout_marginBottom="80dp"
             android:layout_weight=".3"
             android:foregroundGravity="top"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:visibility="gone">
 
             <ImageView
                 android:id="@+id/cancelBu"
@@ -56,13 +57,6 @@
                 android:layout_height="48dp"
                 android:layout_weight="1"
                 app:srcCompat="@drawable/ic_outline_cancel_24" />
-
-            <ImageView
-                android:id="@+id/reloadBtu"
-                android:layout_width="wrap_content"
-                android:layout_height="48dp"
-                android:layout_weight="1"
-                app:srcCompat="@drawable/ic_baseline_refresh_24" />
 
             <ImageView
                 android:id="@+id/favBtu"
@@ -83,4 +77,21 @@
         app:lottie_autoPlay="true"
         app:lottie_loop="true"
         app:lottie_rawRes="@raw/loading" />
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/reloadBtu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:layout_margin="16dp"
+        app:cardCornerRadius="50dp"
+        app:cardElevation="10dp">
+
+        <ImageView
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_gravity="right"
+            app:srcCompat="@drawable/ic_baseline_refresh_24" />
+    </androidx.cardview.widget.CardView>
+
 </FrameLayout>

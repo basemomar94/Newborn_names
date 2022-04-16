@@ -2,9 +2,11 @@ package com.bassem.newbornnames.ui.names
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.bassem.newbornnames.R
@@ -12,12 +14,14 @@ import com.bassem.newbornnames.adapters.SwipeAdapter
 import com.bassem.newbornnames.databinding.NamesFragmentBinding
 import com.bassem.newbornnames.entities.NameClass
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.snackbar.Snackbar
 
 class NamesFragment : Fragment(R.layout.names_fragment), SwipeAdapter.Click {
     var binding: NamesFragmentBinding? = null
     lateinit var bottomNavigationView: BottomNavigationView
     var viewmodel: NamesViewModel? = null
     var swipeAdapter: SwipeAdapter? = null
+    var namesList: MutableList<NameClass>? = null
 
 
     override fun onCreateView(
@@ -45,21 +49,27 @@ class NamesFragment : Fragment(R.layout.names_fragment), SwipeAdapter.Click {
                 binding?.nameLayout?.setImageResource(R.drawable.babygi)
             }
         }
+        namesList = mutableListOf()
 
         viewmodel!!.namesList.observe(viewLifecycleOwner) {
             if (it != null) {
                 endLoading()
-                initSwipeView(it)
+                namesList = it
+                initSwipeView(namesList!!)
             }
         }
 
         binding?.cancelBu?.setOnClickListener {
-            println("CANCEL")
+            Log.d("TAG", namesList!!.size.toString())
             binding?.stackView?.onButtonClick(false)
+            showSnackbar()
+
+
         }
 
         binding?.reloadBtu?.setOnClickListener {
             binding?.stackView?.reloadAdapterData()
+            animate(it)
         }
 
         binding?.favBtu?.setOnClickListener {
@@ -75,7 +85,7 @@ class NamesFragment : Fragment(R.layout.names_fragment), SwipeAdapter.Click {
 
 
     private fun initSwipeView(list: MutableList<NameClass>) {
-        swipeAdapter = SwipeAdapter(list, this)
+        swipeAdapter = SwipeAdapter(list, this,requireContext())
         binding?.stackView?.apply {
             adapter = swipeAdapter
         }
@@ -87,7 +97,7 @@ class NamesFragment : Fragment(R.layout.names_fragment), SwipeAdapter.Click {
             item.isFavorite = true
             viewmodel?.addtoFav(item, requireContext())
             requireActivity().runOnUiThread {
-                swipeAdapter?.notifyDataSetChanged()
+                binding?.stackView?.onButtonClick(true)
             }
 
         }.start()
@@ -97,6 +107,11 @@ class NamesFragment : Fragment(R.layout.names_fragment), SwipeAdapter.Click {
     override fun onshareClick(item: NameClass) {
 
         shareName(item)
+        animate(requireView().findViewById(R.id.share))
+    }
+
+    override fun onCancel(item: NameClass) {
+        binding?.stackView?.onButtonClick(false)
     }
 
     private fun endLoading() {
@@ -116,6 +131,21 @@ class NamesFragment : Fragment(R.layout.names_fragment), SwipeAdapter.Click {
         )
         sendIntent.type = "text/plain"
         startActivity(sendIntent)
+    }
+
+    private fun showSnackbar() {
+        Snackbar.make(requireView(), "تم ازالة الاسم ", Snackbar.LENGTH_LONG).apply {
+            show()
+            setAction("تراجع") {
+
+            }
+
+        }
+    }
+
+    private fun animate(view: View) {
+        val animation = AnimationUtils.loadAnimation(requireContext(), R.anim.rotate)
+        view.startAnimation(animation)
     }
 
 }
