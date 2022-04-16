@@ -1,5 +1,6 @@
 package com.bassem.newbornnames.ui.names
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -19,6 +20,7 @@ class NamesFragment : Fragment(R.layout.names_fragment), SwipeAdapter.Click {
     var binding: NamesFragmentBinding? = null
     lateinit var bottomNavigationView: BottomNavigationView
     var viewmodel: NamesViewModel? = null
+    var swipeAdapter: SwipeAdapter? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,24 +40,26 @@ class NamesFragment : Fragment(R.layout.names_fragment), SwipeAdapter.Click {
         super.onViewCreated(view, savedInstanceState)
         bottomNavigationView = requireActivity().findViewById(R.id.bottomAppBar)
         bottomNavigationView.visibility = View.VISIBLE
-         viewmodel = ViewModelProvider(this)[NamesViewModel::class.java]
+        viewmodel = ViewModelProvider(this)[NamesViewModel::class.java]
         var key = this.arguments?.getString("key")
         when (key) {
             "male" -> {
                 viewmodel!!.getBoyssNames()
-                binding?.nameLayout?.background = requireActivity().getDrawable(R.drawable.babyboy)
+                binding?.nameLayout?.setImageResource(R.drawable.babyboy)
 
             }
             "female" -> {
                 viewmodel!!.getGirlsNames()
-                binding?.nameLayout?.background = requireActivity().getDrawable(R.drawable.babygi)
+                binding?.nameLayout?.setImageResource(R.drawable.babygi)
             }
         }
 
         viewmodel!!.namesList.observe(viewLifecycleOwner) {
             if (it != null) {
+                endLoading()
                 initSwipeView(it)
             }
+            println(it)
         }
 
 
@@ -63,28 +67,47 @@ class NamesFragment : Fragment(R.layout.names_fragment), SwipeAdapter.Click {
 
 
     private fun initSwipeView(list: MutableList<NameClass>) {
-        val swipeAdapter = SwipeAdapter(list, this)
+         swipeAdapter = SwipeAdapter(list, this)
         binding?.stackView?.apply {
             adapter = swipeAdapter
 
         }
     }
 
-    override  fun onfavClick(item: NameClass) {
+    override fun onfavClick(item: NameClass) {
         Thread(Runnable {
-            viewmodel?.addtoFav(item,requireContext())
+            item.isFavorite = true
+            viewmodel?.addtoFav(item, requireContext())
+            requireActivity().runOnUiThread {
+                swipeAdapter?.notifyDataSetChanged()
+            }
 
         }).start()
 
     }
 
-    override  fun onshareClick(item: NameClass) {
+    override fun onshareClick(item: NameClass) {
 
-        println(
-            "ايه رايك في اسم ${item.title}" +
-                    " معناه ${item.description}"
-        )
+        shareName(item)
     }
 
+    private fun endLoading() {
+        binding?.apply {
+            stackView.visibility = View.VISIBLE
+            loading.visibility = View.GONE
+        }
+    }
+
+    private fun shareName(name: NameClass) {
+        val sendIntent = Intent()
+        sendIntent.action = Intent.ACTION_SEND
+        sendIntent.putExtra(
+            Intent.EXTRA_TEXT,
+            "ايه رايك في اسم '${name.title}' "
+                    + " معناه ${name.description}"
+        )
+        sendIntent.type = "text/plain"
+        startActivity(sendIntent)
+    }
 
 }

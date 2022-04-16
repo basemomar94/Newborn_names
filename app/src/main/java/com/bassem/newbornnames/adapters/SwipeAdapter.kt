@@ -13,7 +13,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 class SwipeAdapter(
-    val namesList: MutableList<NameClass>,
+    var namesList: MutableList<NameClass>,
     //val context: Context
     val listner: Click
 ) : BaseAdapter() {
@@ -49,6 +49,11 @@ class SwipeAdapter(
         fav.setOnClickListener {
             listner.onfavClick(currentItem)
         }
+        if (currentItem.isFavorite) {
+            fav.setImageResource(R.drawable.red_favorite_24)
+        } else {
+            fav.setImageResource(R.drawable.ic_baseline_favorite_border_24)
+        }
 
 
 
@@ -59,5 +64,10 @@ class SwipeAdapter(
     interface Click {
         fun onfavClick(item: NameClass)
         fun onshareClick(item: NameClass)
+    }
+
+    fun addList(list: MutableList<NameClass>) {
+        namesList=list
+        notifyDataSetChanged()
     }
 }

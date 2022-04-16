@@ -24,4 +24,8 @@
         android:id="@+id/fav"
         android:name="com.bassem.newbornnames.ui.favorite.Favorite_Fragment"
         android:label="Favorite_Fragment" />
+    <fragment
+        android:id="@+id/more"
+        android:name="com.bassem.newbornnames.ui.more.MoreFragment"
+        android:label="MoreFragment" />
 </navigation>
