@@ -58,30 +58,26 @@
             android:textAlignment="center"
             android:textColor="@color/teal_200" />
 
-        <com.google.android.material.chip.ChipGroup
+        <com.google.android.material.button.MaterialButtonToggleGroup
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="8dp"
+            android:padding="2dp"
             app:singleSelection="true">
 
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chip4"
-                style="@style/Widget.MaterialComponents.Chip.Filter"
+            <Button
+                android:id="@+id/button3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/khaled"
+                android:layout_weight="1"
+                android:text="ولد" />
 
-                android:text="ذكر" />
-
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chip5"
-                style="@style/Widget.MaterialComponents.Chip.Filter"
-
+            <Button
+                android:id="@+id/button2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/khaled"
-                android:text="انثي" />
-        </com.google.android.material.chip.ChipGroup>
+                android:layout_weight="1"
+                android:text="بنت" />
+        </com.google.android.material.button.MaterialButtonToggleGroup>
 
     </LinearLayout>
 

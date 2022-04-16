@@ -11,10 +11,7 @@ import com.bassem.newbornnames.R
 import com.bassem.newbornnames.adapters.SwipeAdapter
 import com.bassem.newbornnames.databinding.NamesFragmentBinding
 import com.bassem.newbornnames.entities.NameClass
-import com.bassem.newbornnames.local.NamesDatabase
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 
 class NamesFragment : Fragment(R.layout.names_fragment), SwipeAdapter.Click {
     var binding: NamesFragmentBinding? = null
@@ -22,10 +19,6 @@ class NamesFragment : Fragment(R.layout.names_fragment), SwipeAdapter.Click {
     var viewmodel: NamesViewModel? = null
     var swipeAdapter: SwipeAdapter? = null
 
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -41,8 +34,7 @@ class NamesFragment : Fragment(R.layout.names_fragment), SwipeAdapter.Click {
         bottomNavigationView = requireActivity().findViewById(R.id.bottomAppBar)
         bottomNavigationView.visibility = View.VISIBLE
         viewmodel = ViewModelProvider(this)[NamesViewModel::class.java]
-        var key = this.arguments?.getString("key")
-        when (key) {
+        when (this.arguments?.getString("key")) {
             "male" -> {
                 viewmodel!!.getBoyssNames()
                 binding?.nameLayout?.setImageResource(R.drawable.babyboy)
@@ -59,7 +51,23 @@ class NamesFragment : Fragment(R.layout.names_fragment), SwipeAdapter.Click {
                 endLoading()
                 initSwipeView(it)
             }
-            println(it)
+        }
+
+        binding?.cancelBu?.setOnClickListener {
+            println("CANCEL")
+            binding?.stackView?.onButtonClick(false)
+        }
+
+        binding?.reloadBtu?.setOnClickListener {
+            binding?.stackView?.reloadAdapterData()
+        }
+
+        binding?.favBtu?.setOnClickListener {
+            binding?.stackView?.onButtonClick(true)
+            // val currentCard=
+            val n = swipeAdapter?.count
+            println(swipeAdapter?.namesList?.size)
+
         }
 
 
@@ -67,22 +75,22 @@ class NamesFragment : Fragment(R.layout.names_fragment), SwipeAdapter.Click {
 
 
     private fun initSwipeView(list: MutableList<NameClass>) {
-         swipeAdapter = SwipeAdapter(list, this)
+        swipeAdapter = SwipeAdapter(list, this)
         binding?.stackView?.apply {
             adapter = swipeAdapter
-
         }
+
     }
 
     override fun onfavClick(item: NameClass) {
-        Thread(Runnable {
+        Thread {
             item.isFavorite = true
             viewmodel?.addtoFav(item, requireContext())
             requireActivity().runOnUiThread {
                 swipeAdapter?.notifyDataSetChanged()
             }
 
-        }).start()
+        }.start()
 
     }
 
@@ -93,7 +101,7 @@ class NamesFragment : Fragment(R.layout.names_fragment), SwipeAdapter.Click {
 
     private fun endLoading() {
         binding?.apply {
-            stackView.visibility = View.VISIBLE
+            stackbtuLayout.visibility = View.VISIBLE
             loading.visibility = View.GONE
         }
     }
