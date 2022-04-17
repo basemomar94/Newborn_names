@@ -39,31 +39,19 @@ class NamesFragment : Fragment(R.layout.names_fragment), SwipeAdapter.Click {
         bottomNavigationView = requireActivity().findViewById(R.id.bottomAppBar)
         bottomNavigationView.visibility = View.VISIBLE
         viewmodel = ViewModelProvider(this)[NamesViewModel::class.java]
-        when (babySex) {
-            "male" -> {
-                viewmodel!!.getBoyssNames()
-                binding?.nameLayout?.setImageResource(R.drawable.babyboy)
-
-            }
-            "female" -> {
-                viewmodel!!.getGirlsNames()
-                binding?.nameLayout?.setImageResource(R.drawable.babygi)
-            }
-        }
+        checkBabySex()
         namesList = mutableListOf()
 
         viewmodel!!.namesList.observe(viewLifecycleOwner) {
             if (it != null) {
                 endLoading()
-                namesList = it
-                initSwipeView(namesList!!)
+                initSwipeView(it)
             }
         }
 
         binding?.cancelBu?.setOnClickListener {
             Log.d("TAG", namesList!!.size.toString())
             binding?.stackView?.onButtonClick(false)
-            showSnackbar()
 
 
         }
@@ -86,7 +74,7 @@ class NamesFragment : Fragment(R.layout.names_fragment), SwipeAdapter.Click {
 
 
     private fun initSwipeView(list: MutableList<NameClass>) {
-        swipeAdapter = SwipeAdapter(list, this,requireContext())
+        swipeAdapter = SwipeAdapter(list, this, requireContext())
         binding?.stackView?.apply {
             adapter = swipeAdapter
         }
@@ -134,15 +122,20 @@ class NamesFragment : Fragment(R.layout.names_fragment), SwipeAdapter.Click {
         startActivity(sendIntent)
     }
 
-    private fun showSnackbar() {
-        Snackbar.make(requireView(), "تم ازالة الاسم ", Snackbar.LENGTH_LONG).apply {
-            show()
-            setAction("تراجع") {
+    private fun checkBabySex() {
+        when (babySex) {
+            "male" -> {
+                viewmodel!!.getBoyssNames()
+                binding?.nameLayout?.setImageResource(R.drawable.babyboy)
 
             }
-
+            "female" -> {
+                viewmodel!!.getGirlsNames()
+                binding?.nameLayout?.setImageResource(R.drawable.babygi)
+            }
         }
     }
+
 
     private fun animate(view: View) {
         val animation = AnimationUtils.loadAnimation(requireContext(), R.anim.rotate)

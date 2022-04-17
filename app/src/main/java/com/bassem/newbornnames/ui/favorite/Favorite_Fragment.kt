@@ -12,6 +12,7 @@ import com.bassem.newbornnames.R
 import com.bassem.newbornnames.adapters.SwipeAdapter
 import com.bassem.newbornnames.databinding.NamesFragmentBinding
 import com.bassem.newbornnames.entities.NameClass
+import com.bassem.newbornnames.utilities.CONSTANTS
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
@@ -35,6 +36,7 @@ class Favorite_Fragment : Fragment(R.layout.names_fragment), SwipeAdapter.Click 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        checkBabySex()
 
         viewModel = ViewModelProvider(this)[FavoriteViewModel::class.java]
         Thread(Runnable {
@@ -42,16 +44,20 @@ class Favorite_Fragment : Fragment(R.layout.names_fragment), SwipeAdapter.Click 
 
         }).start()
         viewModel!!.favNames.observe(viewLifecycleOwner) {
-            namesList=it
+            namesList = it
             initSwipeView(it)
 
             endLoading()
+        }
+        binding?.reloadBtu?.setOnClickListener {
+            binding?.stackView?.reloadAdapterData()
+            animate(it)
         }
     }
 
 
     private fun initSwipeView(list: MutableList<NameClass>) {
-        val swipeAdapter = SwipeAdapter(list, this,requireContext())
+        val swipeAdapter = SwipeAdapter(list, this, requireContext())
         binding?.stackView?.apply {
             adapter = swipeAdapter
 
@@ -59,12 +65,8 @@ class Favorite_Fragment : Fragment(R.layout.names_fragment), SwipeAdapter.Click 
     }
 
     override fun onfavClick(item: NameClass) {
-        Thread(Runnable {
-            item.isFavorite = false
-            viewModel?.removeFav(item, requireContext())
+        binding?.stackView?.onButtonClick(true)
 
-
-        }).start()
 
     }
 
@@ -74,6 +76,13 @@ class Favorite_Fragment : Fragment(R.layout.names_fragment), SwipeAdapter.Click 
     }
 
     override fun onCancel(item: NameClass) {
+        binding?.stackView?.onButtonClick(false)
+        Thread(Runnable {
+            item.isFavorite = false
+            viewModel?.removeFav(item, requireContext())
+
+
+        }).start()
 
     }
 
@@ -94,6 +103,23 @@ class Favorite_Fragment : Fragment(R.layout.names_fragment), SwipeAdapter.Click 
         )
         sendIntent.type = "text/plain"
         startActivity(sendIntent)
+    }
+
+    private fun checkBabySex() {
+        when (CONSTANTS.babySex) {
+            "male" -> {
+                binding?.nameLayout?.setImageResource(R.drawable.babyboy)
+
+            }
+            "female" -> {
+                binding?.nameLayout?.setImageResource(R.drawable.babygi)
+            }
+        }
+    }
+
+    private fun animate(view: View) {
+        val animation = AnimationUtils.loadAnimation(requireContext(), R.anim.rotate)
+        view.startAnimation(animation)
     }
 
 
