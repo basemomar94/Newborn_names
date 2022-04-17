@@ -13,6 +13,7 @@ import com.bassem.newbornnames.R
 import com.bassem.newbornnames.adapters.SwipeAdapter
 import com.bassem.newbornnames.databinding.NamesFragmentBinding
 import com.bassem.newbornnames.entities.NameClass
+import com.bassem.newbornnames.utilities.CONSTANTS.babySex
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.snackbar.Snackbar
 
@@ -38,7 +39,7 @@ class NamesFragment : Fragment(R.layout.names_fragment), SwipeAdapter.Click {
         bottomNavigationView = requireActivity().findViewById(R.id.bottomAppBar)
         bottomNavigationView.visibility = View.VISIBLE
         viewmodel = ViewModelProvider(this)[NamesViewModel::class.java]
-        when (this.arguments?.getString("key")) {
+        when (babySex) {
             "male" -> {
                 viewmodel!!.getBoyssNames()
                 binding?.nameLayout?.setImageResource(R.drawable.babyboy)

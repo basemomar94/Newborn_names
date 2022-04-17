@@ -9,8 +9,7 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.Fragment
 import com.bassem.newbornnames.R
 import com.bassem.newbornnames.databinding.MoreFragmentBinding
-import com.bassem.newbornnames.utilities.Pref
-import com.bassem.newbornnames.utilities.ThemeState.isDark
+import com.bassem.newbornnames.utilities.CONSTANTS.isDark
 
 class MoreFragment : Fragment(R.layout.more_fragment) {
     var binding: MoreFragmentBinding? = null
@@ -30,7 +29,9 @@ class MoreFragment : Fragment(R.layout.more_fragment) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding?.switchB?.isChecked = isDark
+        isDark?.let {
+            binding?.switchB?.isChecked = it
+        }
 
         binding?.switchB?.setOnCheckedChangeListener { compoundButton, b ->
             changeMode(b)
