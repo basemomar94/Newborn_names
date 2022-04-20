@@ -3,6 +3,7 @@ package com.bassem.newbornnames.utilities
 import android.app.Application
 import android.content.Context
 import android.content.res.Configuration
+import android.util.Log
 import androidx.appcompat.app.AppCompatDelegate
 import com.bassem.newbornnames.utilities.CONSTANTS.babySex
 import com.bassem.newbornnames.utilities.CONSTANTS.isDark
@@ -35,11 +36,13 @@ class NameApp : Application() {
     }
 
     private fun checkDeviceMood() {
-        when (resources.configuration.uiMode) {
+        when (applicationContext?.resources?.configuration?.uiMode?.and(Configuration.UI_MODE_NIGHT_MASK)
+        ) {
             Configuration.UI_MODE_NIGHT_YES -> isDark = true
             Configuration.UI_MODE_NIGHT_NO -> isDark = false
 
         }
-        println(isDark)
+
+        Log.d("App", isDark.toString())
     }
 }

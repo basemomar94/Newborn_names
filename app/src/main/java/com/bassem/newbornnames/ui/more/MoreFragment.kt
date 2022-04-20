@@ -1,15 +1,19 @@
 package com.bassem.newbornnames.ui.more
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.Fragment
 import com.bassem.newbornnames.R
 import com.bassem.newbornnames.databinding.MoreFragmentBinding
+import com.bassem.newbornnames.utilities.CONSTANTS.babySex
 import com.bassem.newbornnames.utilities.CONSTANTS.isDark
+import com.google.android.material.button.MaterialButtonToggleGroup
 
 class MoreFragment : Fragment(R.layout.more_fragment) {
     var binding: MoreFragmentBinding? = null
@@ -42,6 +46,17 @@ class MoreFragment : Fragment(R.layout.more_fragment) {
             edit?.apply()
 
         }
+        binding?.toggleGroup?.addOnButtonCheckedListener { group, checkedId, isChecked ->
+            if (isChecked) {
+                when (view.findViewById<Button>(checkedId).text) {
+                    "ولد" -> changeBabySex("male")
+                    "بنت" -> changeBabySex("female")
+                }
+            }
+
+        }
+
+
     }
 
     private fun changeMode(status: Boolean) {
@@ -52,6 +67,15 @@ class MoreFragment : Fragment(R.layout.more_fragment) {
 
         }
         AppCompatDelegate.setDefaultNightMode(theme)
+
+    }
+
+    private fun changeBabySex(sex: String) {
+        val pref: SharedPreferences =
+            requireContext().getSharedPreferences("settings", Context.MODE_PRIVATE)
+        val editor = pref.edit()
+        editor.putString("sex", sex)
+        babySex = sex
 
     }
 }

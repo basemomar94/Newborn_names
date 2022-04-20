@@ -88,8 +88,8 @@
         app:cardElevation="10dp">
 
         <ImageView
-            android:layout_width="48dp"
-            android:layout_height="48dp"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
             android:layout_gravity="right"
             app:srcCompat="@drawable/ic_baseline_refresh_24" />
     </androidx.cardview.widget.CardView>

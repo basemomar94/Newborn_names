@@ -56,9 +56,12 @@
             android:fontFamily="@font/khaled"
             android:text="جنس المولود"
             android:textAlignment="center"
-            android:textColor="@color/teal_200" />
+            android:textColor="@color/teal_200"
+            android:visibility="visible" />
 
         <com.google.android.material.button.MaterialButtonToggleGroup
+            android:id="@+id/toggleGroup"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="2dp"
@@ -66,6 +69,8 @@
 
             <Button
                 android:id="@+id/button3"
+
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -73,6 +78,8 @@
 
             <Button
                 android:id="@+id/button2"
+
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
