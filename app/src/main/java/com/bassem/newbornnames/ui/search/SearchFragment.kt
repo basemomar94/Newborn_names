@@ -7,6 +7,8 @@ import android.view.ViewGroup
 import android.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bassem.newbornnames.R
 import com.bassem.newbornnames.adapters.SearchAdapter
@@ -14,10 +16,10 @@ import com.bassem.newbornnames.databinding.SearchFragmentBinding
 import com.bassem.newbornnames.entities.NameClass
 import com.bassem.newbornnames.utilities.CONSTANTS.babySex
 
-class SearchFragment : Fragment(R.layout.search_fragment) {
+class SearchFragment : Fragment(R.layout.search_fragment), SearchAdapter.OnClick {
     var binding: SearchFragmentBinding? = null
     var searchAdapter: SearchAdapter? = null
-    var viewHolder: SearchViewModel? = null
+    var viewModel: SearchViewModel? = null
     var namesList: MutableList<NameClass>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,9 +38,9 @@ class SearchFragment : Fragment(R.layout.search_fragment) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewHolder = ViewModelProvider(this)[SearchViewModel::class.java]
+        viewModel = ViewModelProvider(this)[SearchViewModel::class.java]
         checkSex()
-        viewHolder?.namesList?.observe(viewLifecycleOwner) {
+        viewModel?.namesList?.observe(viewLifecycleOwner) {
             namesList = it
             initRv(namesList!!)
             endLoading()
@@ -61,7 +63,7 @@ class SearchFragment : Fragment(R.layout.search_fragment) {
     }
 
     private fun initRv(list: MutableList<NameClass>) {
-        searchAdapter = SearchAdapter(list)
+        searchAdapter = SearchAdapter(list, this)
         binding?.searchRv?.apply {
             adapter = searchAdapter
             layoutManager = LinearLayoutManager(requireContext())
@@ -80,11 +82,11 @@ class SearchFragment : Fragment(R.layout.search_fragment) {
     private fun checkSex() {
         when (babySex) {
             "male" -> {
-                viewHolder?.getNames("boys")
+                viewModel?.getNames("boys")
                 binding?.searchLayout?.setImageResource(R.drawable.babyboy)
             }
             "female" -> {
-                viewHolder?.getNames("girls")
+                viewModel?.getNames("girls")
                 binding?.searchLayout?.setImageResource(R.drawable.babygi)
 
             }
@@ -101,4 +103,27 @@ class SearchFragment : Fragment(R.layout.search_fragment) {
         searchAdapter?.addList(searchOutput)
 
     }
+
+    override fun makeFav(name: NameClass, position: Int) {
+        Thread {
+            name.isFavorite = true
+            viewModel?.addtoFav(name, requireContext())
+            requireActivity().runOnUiThread {
+                searchAdapter?.notifyItemChanged(position)
+            }
+
+
+        }.start()
+
+    }
+
+    override fun expandName(name: NameClass, position: Int) {
+        val bundle = Bundle()
+        bundle.putSerializable("name", name)
+        val nav = Navigation.findNavController(requireActivity(), R.id.fragmentContainerView)
+        nav.navigate(R.id.action_search_to_nameViewFragment, bundle)
+
+    }
+
+
 }

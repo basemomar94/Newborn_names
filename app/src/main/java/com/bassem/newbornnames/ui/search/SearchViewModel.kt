@@ -1,8 +1,10 @@
 package com.bassem.newbornnames.ui.search
 
+import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.bassem.newbornnames.entities.NameClass
+import com.bassem.newbornnames.local.NamesDatabase
 import com.google.firebase.firestore.FirebaseFirestore
 
 class SearchViewModel : ViewModel() {
@@ -20,5 +22,11 @@ class SearchViewModel : ViewModel() {
             }
 
         }
+    }
+
+
+    fun addtoFav(item: NameClass, context: Context) {
+        var db = NamesDatabase.getInstance(context)
+        db.namesDao().addName(item)
     }
 }

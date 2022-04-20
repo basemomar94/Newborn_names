@@ -49,5 +49,13 @@
     <fragment
         android:id="@+id/search"
         android:name="com.bassem.newbornnames.ui.search.SearchFragment"
-        android:label="SearchFragment" />
+        android:label="SearchFragment" >
+        <action
+            android:id="@+id/action_search_to_nameViewFragment"
+            app:destination="@id/nameViewFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/nameViewFragment"
+        android:name="com.bassem.newbornnames.ui.nameview.NameViewFragment"
+        android:label="NameViewFragment" />
 </navigation>

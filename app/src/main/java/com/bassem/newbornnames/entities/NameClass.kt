@@ -2,6 +2,7 @@ package com.bassem.newbornnames.entities
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import java.io.Serializable
 
 @Entity(tableName = "namesTable")
 data class NameClass(
@@ -10,4 +11,4 @@ data class NameClass(
     var title: String = "",
     var description: String = "",
     var isFavorite: Boolean = false
-)
+) : Serializable
