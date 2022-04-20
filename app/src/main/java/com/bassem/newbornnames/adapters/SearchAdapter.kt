@@ -10,7 +10,7 @@ import com.bassem.newbornnames.R
 import com.bassem.newbornnames.entities.NameClass
 
 class SearchAdapter(
-    val namesList: MutableList<NameClass>
+    var namesList: MutableList<NameClass>
 ) : RecyclerView.Adapter<SearchAdapter.ViewHolder>() {
 
 
@@ -31,4 +31,9 @@ class SearchAdapter(
     }
 
     override fun getItemCount() = namesList.size
+
+    fun addList(list: MutableList<NameClass>) {
+        namesList = list
+        notifyDataSetChanged()
+    }
 }
