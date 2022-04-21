@@ -1,5 +1,6 @@
 package com.bassem.newbornnames.ui.names
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -14,6 +15,8 @@ import com.bassem.newbornnames.adapters.SwipeAdapter
 import com.bassem.newbornnames.databinding.NamesFragmentBinding
 import com.bassem.newbornnames.entities.NameClass
 import com.bassem.newbornnames.utilities.CONSTANTS.babySex
+import com.bassem.newbornnames.utilities.CONSTANTS.isFirst
+import com.bassem.newbornnames.utilities.CONSTANTS.isUpdate
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.snackbar.Snackbar
 
@@ -44,9 +47,23 @@ class NamesFragment : Fragment(R.layout.names_fragment), SwipeAdapter.Click {
 
         viewmodel!!.namesList.observe(viewLifecycleOwner) {
             if (it != null) {
-                endLoading()
-                initSwipeView(it)
+                //  initSwipeView(it)
+                Thread(Runnable {
+                    println("First ==$isFirst")
+                    if (isFirst!! || isUpdate) {
+
+                        viewmodel?.addtoDatabase(it, requireContext())
+                    }
+                    babySex?.let { it1 -> viewmodel?.getDataRoom(requireContext(), it1) }
+
+                }).start()
             }
+        }
+        viewmodel!!.namesRoom.observe(viewLifecycleOwner) {
+            initSwipeView(it)
+            endLoading()
+            updateIsFirst()
+
         }
 
         binding?.cancelBu?.setOnClickListener {
@@ -108,6 +125,7 @@ class NamesFragment : Fragment(R.layout.names_fragment), SwipeAdapter.Click {
             stackbtuLayout.visibility = View.VISIBLE
             loading.visibility = View.GONE
         }
+      //  updateIsFirst()
     }
 
     private fun shareName(name: NameClass) {
@@ -125,12 +143,12 @@ class NamesFragment : Fragment(R.layout.names_fragment), SwipeAdapter.Click {
     private fun checkBabySex() {
         when (babySex) {
             "male" -> {
-                viewmodel!!.getBoyssNames()
+                viewmodel!!.getDataFirebase()
                 binding?.nameLayout?.setImageResource(R.drawable.babyboy)
 
             }
             "female" -> {
-                viewmodel!!.getGirlsNames()
+                viewmodel!!.getDataFirebase()
                 binding?.nameLayout?.setImageResource(R.drawable.babygi)
             }
         }
@@ -140,6 +158,14 @@ class NamesFragment : Fragment(R.layout.names_fragment), SwipeAdapter.Click {
     private fun animate(view: View) {
         val animation = AnimationUtils.loadAnimation(requireContext(), R.anim.rotate)
         view.startAnimation(animation)
+    }
+
+    private fun updateIsFirst() {
+        val pref = requireActivity().getSharedPreferences("settings", Context.MODE_PRIVATE)
+        val editor = pref.edit()
+        editor.putBoolean("isFirst", false)
+        editor.apply()
+        isFirst = false
     }
 
 }

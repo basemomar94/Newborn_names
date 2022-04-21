@@ -13,6 +13,7 @@ import com.bassem.newbornnames.R
 import com.bassem.newbornnames.databinding.HomeFragmentBinding
 import com.bassem.newbornnames.ui.names.NamesFragment
 import com.bassem.newbornnames.utilities.CONSTANTS.babySex
+import com.bassem.newbornnames.utilities.CONSTANTS.isFirst
 
 class HomeFragment : Fragment(R.layout.home_fragment) {
     var binding: HomeFragmentBinding? = null
@@ -37,7 +38,7 @@ class HomeFragment : Fragment(R.layout.home_fragment) {
             chooseBabySex("male")
         }
         binding?.femaleCard?.setOnClickListener {
-           // goToNames("female")
+            // goToNames("female")
             chooseBabySex("female")
 
         }

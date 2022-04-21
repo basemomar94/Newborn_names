@@ -24,9 +24,14 @@ class SearchViewModel : ViewModel() {
         }
     }
 
+    fun getallNames(key: String, context: Context) {
+        var db = NamesDatabase.getInstance(context)
+        namesList.postValue(db.namesDao().getFilteredNames(key))
+    }
+
 
     fun addtoFav(item: NameClass, context: Context) {
         var db = NamesDatabase.getInstance(context)
-        db.namesDao().addName(item)
+        db.namesDao().addFavorite(item.id!!)
     }
 }

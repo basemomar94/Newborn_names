@@ -7,6 +7,7 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatDelegate
 import com.bassem.newbornnames.utilities.CONSTANTS.babySex
 import com.bassem.newbornnames.utilities.CONSTANTS.isDark
+import com.bassem.newbornnames.utilities.CONSTANTS.isFirst
 
 class NameApp : Application() {
     override fun onCreate() {
@@ -20,6 +21,13 @@ class NameApp : Application() {
         }
         val sex = pref?.getString("sex", "none")
         babySex = sex
+        val first = pref?.getBoolean("isFirst", true)
+        isFirst = first!!
+
+        /*   val first = pref?.getBoolean("isFirst", false)
+           if (first != null) {
+               isFirst = first
+           }*/
 
 
     }

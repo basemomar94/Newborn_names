@@ -8,7 +8,7 @@ import com.bassem.newbornnames.entities.NameClass
 
 private const val DATABASE_NAME = "NAMES_DATABASE"
 
-@Database(entities = [NameClass::class], version = 1, exportSchema = false)
+@Database(entities = [NameClass::class], version = 4, exportSchema = false)
 abstract class NamesDatabase : RoomDatabase() {
 
     abstract fun namesDao(): NamesDao
@@ -30,7 +30,7 @@ abstract class NamesDatabase : RoomDatabase() {
             return Room.databaseBuilder(
                 context.applicationContext, NamesDatabase::class.java,
                 DATABASE_NAME
-            ).build()
+            ).fallbackToDestructiveMigration().build()
 
         }
 

@@ -56,6 +56,6 @@
     </fragment>
     <fragment
         android:id="@+id/nameViewFragment"
-        android:name="com.bassem.newbornnames.ui.nameview.NameViewFragment"
+        android:name="com.bassem.newbornnames.ui.nameview.ViewFragment"
         android:label="NameViewFragment" />
 </navigation>

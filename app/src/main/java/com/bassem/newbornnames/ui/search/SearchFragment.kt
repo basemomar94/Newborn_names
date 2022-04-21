@@ -39,9 +39,13 @@ class SearchFragment : Fragment(R.layout.search_fragment), SearchAdapter.OnClick
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProvider(this)[SearchViewModel::class.java]
-        checkSex()
+        Thread(Runnable {
+            checkSex()
+
+        }).start()
         viewModel?.namesList?.observe(viewLifecycleOwner) {
             namesList = it
+            println(it)
             initRv(namesList!!)
             endLoading()
         }
@@ -80,16 +84,12 @@ class SearchFragment : Fragment(R.layout.search_fragment), SearchAdapter.OnClick
     }
 
     private fun checkSex() {
-        when (babySex) {
-            "male" -> {
-                viewModel?.getNames("boys")
-                binding?.searchLayout?.setImageResource(R.drawable.babyboy)
-            }
-            "female" -> {
-                viewModel?.getNames("girls")
-                binding?.searchLayout?.setImageResource(R.drawable.babygi)
+        babySex?.let { viewModel?.getallNames(it, requireContext()) }
 
-            }
+        when (babySex) {
+            "male" -> binding?.searchLayout?.setImageResource(R.drawable.babyboy)
+
+            "female" -> binding?.searchLayout?.setImageResource(R.drawable.babygi)
         }
     }
 
