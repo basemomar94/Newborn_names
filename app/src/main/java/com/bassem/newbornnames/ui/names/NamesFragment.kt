@@ -18,14 +18,12 @@ import com.bassem.newbornnames.utilities.CONSTANTS.babySex
 import com.bassem.newbornnames.utilities.CONSTANTS.isFirst
 import com.bassem.newbornnames.utilities.CONSTANTS.isUpdate
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.android.material.snackbar.Snackbar
 
 class NamesFragment : Fragment(R.layout.names_fragment), SwipeAdapter.Click {
     var binding: NamesFragmentBinding? = null
     lateinit var bottomNavigationView: BottomNavigationView
     var viewmodel: NamesViewModel? = null
     var swipeAdapter: SwipeAdapter? = null
-    var namesList: MutableList<NameClass>? = null
 
 
     override fun onCreateView(
@@ -42,24 +40,34 @@ class NamesFragment : Fragment(R.layout.names_fragment), SwipeAdapter.Click {
         bottomNavigationView = requireActivity().findViewById(R.id.bottomAppBar)
         bottomNavigationView.visibility = View.VISIBLE
         viewmodel = ViewModelProvider(this)[NamesViewModel::class.java]
-        checkBabySex()
-        namesList = mutableListOf()
+
+        updateUi()
+        Thread(Runnable {
+            if (isFirst) {
+                viewmodel!!.getDataFirebase()
+
+            } else {
+                babySex?.let { it1 -> viewmodel?.getDataRoom(requireContext(), it1) }
+
+            }
+        }).start()
+
+
 
         viewmodel!!.namesList.observe(viewLifecycleOwner) {
             if (it != null) {
-                //  initSwipeView(it)
                 Thread(Runnable {
-                    println("First ==$isFirst")
-                    if (isFirst!! || isUpdate) {
-
+                    if (isFirst) {
                         viewmodel?.addtoDatabase(it, requireContext())
+                        babySex?.let { it1 -> viewmodel?.getDataRoom(requireContext(), it1) }
                     }
-                    babySex?.let { it1 -> viewmodel?.getDataRoom(requireContext(), it1) }
+
 
                 }).start()
             }
         }
         viewmodel!!.namesRoom.observe(viewLifecycleOwner) {
+            Log.d("Room", it.toString())
             initSwipeView(it)
             endLoading()
             updateIsFirst()
@@ -67,7 +75,6 @@ class NamesFragment : Fragment(R.layout.names_fragment), SwipeAdapter.Click {
         }
 
         binding?.cancelBu?.setOnClickListener {
-            Log.d("TAG", namesList!!.size.toString())
             binding?.stackView?.onButtonClick(false)
 
 
@@ -125,7 +132,7 @@ class NamesFragment : Fragment(R.layout.names_fragment), SwipeAdapter.Click {
             stackbtuLayout.visibility = View.VISIBLE
             loading.visibility = View.GONE
         }
-      //  updateIsFirst()
+        //  updateIsFirst()
     }
 
     private fun shareName(name: NameClass) {
@@ -140,15 +147,13 @@ class NamesFragment : Fragment(R.layout.names_fragment), SwipeAdapter.Click {
         startActivity(sendIntent)
     }
 
-    private fun checkBabySex() {
+    private fun updateUi() {
         when (babySex) {
             "male" -> {
-                viewmodel!!.getDataFirebase()
                 binding?.nameLayout?.setImageResource(R.drawable.babyboy)
 
             }
             "female" -> {
-                viewmodel!!.getDataFirebase()
                 binding?.nameLayout?.setImageResource(R.drawable.babygi)
             }
         }
