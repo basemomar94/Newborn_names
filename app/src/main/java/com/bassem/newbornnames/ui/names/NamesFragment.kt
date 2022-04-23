@@ -110,6 +110,7 @@ class NamesFragment : Fragment(R.layout.names_fragment), SwipeAdapter.Click {
             item.isFavorite = true
             viewmodel?.addtoFav(item, requireContext())
             requireActivity().runOnUiThread {
+                swipeAdapter?.notifyDataSetChanged()
                 binding?.stackView?.onButtonClick(true)
             }
 
@@ -125,6 +126,10 @@ class NamesFragment : Fragment(R.layout.names_fragment), SwipeAdapter.Click {
 
     override fun onCancel(item: NameClass) {
         binding?.stackView?.onButtonClick(false)
+        Thread(Runnable {
+            viewmodel?.removeFav(item, requireContext())
+
+        }).start()
     }
 
     private fun endLoading() {

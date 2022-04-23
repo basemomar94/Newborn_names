@@ -54,4 +54,8 @@ class NamesViewModel : ViewModel() {
         var db = NamesDatabase.getInstance(context)
         db.namesDao().addName(item)
     }
+    fun removeFav(item: NameClass, context: Context) {
+        var db = NamesDatabase.getInstance(context)
+        db.namesDao().removeFavorite(item.id!!)
+    }
 }
