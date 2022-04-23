@@ -68,7 +68,7 @@
             app:singleSelection="true">
 
             <Button
-                android:id="@+id/button3"
+                android:id="@+id/boy"
 
                 style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                 android:layout_width="wrap_content"
@@ -77,7 +77,7 @@
                 android:text="ولد" />
 
             <Button
-                android:id="@+id/button2"
+                android:id="@+id/girl"
 
                 style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                 android:layout_width="wrap_content"

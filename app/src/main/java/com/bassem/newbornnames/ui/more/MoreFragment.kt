@@ -54,7 +54,10 @@ class MoreFragment : Fragment(R.layout.more_fragment) {
                 }
             }
 
+
         }
+
+     // binding?.toggleGroup.setche
 
 
     }

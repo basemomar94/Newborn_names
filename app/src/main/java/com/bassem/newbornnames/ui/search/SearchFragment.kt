@@ -106,8 +106,15 @@ class SearchFragment : Fragment(R.layout.search_fragment), SearchAdapter.OnClick
 
     override fun makeFav(name: NameClass, position: Int) {
         Thread {
-            name.isFavorite = true
-            viewModel?.addtoFav(name, requireContext())
+            if (name.isFavorite) {
+                name.isFavorite = false
+                viewModel?.removFav(name, requireContext())
+
+            } else {
+                name.isFavorite = true
+                viewModel?.addtoFav(name, requireContext())
+
+            }
             requireActivity().runOnUiThread {
                 searchAdapter?.notifyItemChanged(position)
             }
